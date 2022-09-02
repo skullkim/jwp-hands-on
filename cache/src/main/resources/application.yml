@@ -1,2 +1,17 @@
 handlebars:
   suffix: .html
+spring:
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 31536000
+      chain:
+        strategy:
+          content:
+            enabled: true
+            paths: /**
+server:
+  compression:
+    enabled: true
+    min-response-size: 10
