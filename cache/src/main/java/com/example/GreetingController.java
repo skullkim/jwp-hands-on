@@ -1,5 +1,7 @@
 package com.example;
 
+import java.util.Arrays;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -29,7 +31,8 @@ public class GreetingController {
     }
 
     @GetMapping("/etag")
-    public String etag() {
+    public String etag(final HttpServletResponse response) {
+        response.addHeader(HttpHeaders.ETAG, "index".hashCode() + "");
         return "index";
     }
 
