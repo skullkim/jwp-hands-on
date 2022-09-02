@@ -16,5 +16,6 @@ public class GreetingInterceptor implements HandlerInterceptor {
                 .cachePrivate()
                 .getHeaderValue();
         response.addHeader(HttpHeaders.CACHE_CONTROL, cacheControlValue);
+        response.addHeader(HttpHeaders.TRANSFER_ENCODING, "chunked");
     }
 }
