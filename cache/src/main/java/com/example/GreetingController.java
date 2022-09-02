@@ -11,7 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 public class GreetingController {
 
     @GetMapping("/")
-    public String index() {
+    public String index(final HttpServletResponse response) {
+        final String cacheControlValue = CacheControl.noCache()
+                .cachePrivate()
+                .getHeaderValue();
+        response.addHeader(HttpHeaders.CACHE_CONTROL, cacheControlValue);
         return "index";
     }
 
