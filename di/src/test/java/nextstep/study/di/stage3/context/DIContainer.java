@@ -1,4 +1,4 @@
-package nextstep.study.di.stage4.annotations;
+package nextstep.study.di.stage3.context;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -9,17 +9,16 @@ import java.util.stream.Collectors;
 /**
  * 스프링의 BeanFactory, ApplicationContext에 해당되는 클래스
  */
-class DIContext {
+class DIContainer {
 
     private final Set<Object> beans;
 
-    public DIContext(final Set<Class<?>> classes) {
+    public DIContainer(final Set<Class<?>> classes) {
         this.beans = classes.stream()
                 .map(this::createInstance)
                 .collect(Collectors.toSet());
         injectDependency();
     }
-
 
     private Object createInstance(final Class<?> clazz) {
         try {
@@ -46,12 +45,8 @@ class DIContext {
                 .getDeclaredFields();
         for (Field field : fields) {
             final Class<?> type = field.getType();
-            for (Object bb : beans) {
-                System.out.println(bb);
-            }
             beans.stream()
-                    .filter(b -> type.isAssignableFrom(b.getClass())
-                            && field.isAnnotationPresent(Inject.class))
+                    .filter(b -> type.isAssignableFrom(b.getClass()))
                     .findFirst()
                     .ifPresent(value -> setField(field, bean, value));
         }
@@ -64,12 +59,6 @@ class DIContext {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
-    }
-
-    public static DIContext createContextForPackage(final String rootPackageName) {
-        final Set<Class<?>> classes = ClassPathScanner.getAllClassesInPackage(rootPackageName);
-        assert classes != null;
-        return new DIContext(classes);
     }
 
     @SuppressWarnings("unchecked")
